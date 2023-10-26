@@ -1,3 +1,50 @@
 @tailwind base;
 @tailwind components;
 @tailwind utilities;
+
+:root {
+  font-family: "Poppins", sans-serif;
+  line-height: 1.5;
+  font-weight: 400;
+  background-color: #fff;
+  color: #000;
+  font-size: 16px;
+
+  font-synthesis: none;
+  text-rendering: optimizeLegibility;
+  -webkit-font-smoothing: antialiased;
+  -moz-osx-font-smoothing: grayscale;
+  -webkit-text-size-adjust: 100%;
+}
+
+.shadow {
+  box-shadow: 0 1.4rem 8rem rgba(0, 0, 0, 0.1);
+}
+
+.cardShadow {
+  box-shadow: 0px 5px 12px -2px rgba(211, 211, 211, 0.2);
+}
+
+.shadowDropdown {
+  box-shadow: 0 20px 30px rgba(57, 76, 96, 0.06);
+}
+
+.shadowNavbar {
+  box-shadow: 0px 5px 12px -2px rgba(211, 211, 211, 0.75);
+}
+
+.bg-button {
+  background-image: linear-gradient(to right, #4facfe 0%, #0a53be 100%);
+}
+
+.table tr.active, .table tr.active:nth-child(even), .table-zebra tbody tr:nth-child(even) {
+  background-color: rgba(0, 0, 0, 0.05);
+}
+
+.bg-name {
+  background: linear-gradient(90deg, #0d6efd, #032658);
+}
+
+.checbox-border {
+  border: 1px solid rgba(0, 0, 0, 0.25);
+}
