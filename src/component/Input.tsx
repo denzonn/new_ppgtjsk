@@ -70,7 +70,9 @@ const Input: FC<InputProps> = ({
           <label
             htmlFor=""
             className={`text-[#697a8d] text-sm mb-1 ${
-              required ? 'after:content-["*"] after:text-red-600 after:ml-1' : ""
+              required
+                ? 'after:content-["*"] after:text-red-600 after:ml-1'
+                : ""
             }`}
           >
             {label}

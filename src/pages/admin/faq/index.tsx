@@ -16,12 +16,11 @@ interface FaqProps {
   jawaban: string;
 }
 
-const FAQ: FC<FaqProps> = ({ pertanyaan, jawaban }) => {
+const FAQ = () => {
   const rootElement = document.documentElement;
   rootElement.style.backgroundColor = "#FAFAFA";
 
   const [data, setData] = useState<FaqProps>();
-  const [editData, setEditData] = useState<FaqProps>();
   const token = Cookie.get("token");
   const [id, setId] = useState<number>(0);
 

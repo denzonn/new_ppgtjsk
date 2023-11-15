@@ -21,7 +21,7 @@ interface FotoKsbProps {
   facebook?: string;
 }
 
-const FotoKsb: FC<FotoKsbProps> = () => {
+const FotoKsb = () => {
   const rootElement = document.documentElement;
   rootElement.style.backgroundColor = "#FAFAFA";
 
@@ -57,7 +57,10 @@ const FotoKsb: FC<FotoKsbProps> = () => {
         setEdit(!edit);
         setId(res?.data?.data?.id);
         initializeFormik(res?.data?.data);
-      });
+      })
+      .catch((err) => {
+        toast.error(err.message)
+      })
   };
 
   const initializeFormik = (data: any) => {
@@ -85,36 +88,44 @@ const FotoKsb: FC<FotoKsbProps> = () => {
     validationSchema: validateKsb,
     onSubmit: (values) => {
       const formData = new FormData();
-      formData.append('foto', values.foto);
-      formData.append('nama', values.nama);
-      formData.append('jabatan', values.jabatan);
-      formData.append('motto', values.motto);
-      formData.append('instagram', values.instagram);
-      formData.append('whatsapp', values.whatsapp);
-      formData.append('facebook', values.facebook);
+      formData.append("foto", values.foto);
+      formData.append("nama", values.nama);
+      formData.append("jabatan", values.jabatan);
+      formData.append("motto", values.motto);
+      formData.append("instagram", values.instagram);
+      formData.append("whatsapp", values.whatsapp);
+      formData.append("facebook", values.facebook);
+      formData.append("_method", 'PUT');
 
       axios
-        .put(`foto-ksb/${id}`, formData, {
+        .post(`foto-ksb/${id}`, formData, {
           headers: {
-            'Content-Type': 'multipart/form-data',
+            "Content-Type": "multipart/form-data",
             Authorization: `Bearer ${token}`,
           },
         })
         .then(() => {
           toast.success("Berhasil Mengupdate Foto KSB");
+
           setEdit(false);
-          getData();
+          getData()
           editFormik.resetForm();
         })
         .catch((err) => {
           if (err.response && err.response.data && err.response.data.message) {
             toast.error(err.response.data.message);
-          } else if (err.response && err.response.data && err.response.data.errors) {
-            const errorMessages = Object.values(err.response.data.errors).flat();
-            toast.error(errorMessages.join('\n'));
+          } else if (
+            err.response &&
+            err.response.data &&
+            err.response.data.errors
+          ) {
+            const errorMessages = Object.values(
+              err.response.data.errors
+            ).flat();
+            toast.error(errorMessages.join("\n"));
           } else {
             // If the error doesn't have the expected structure, display a generic error message
-            toast.error('An error occurred. Please try again.');
+            toast.error("An error occurred. Please try again.");
           }
         });
     },
@@ -140,6 +151,7 @@ const FotoKsb: FC<FotoKsbProps> = () => {
             <table className="table">
               <thead>
                 <tr className="border-b-gray-200 text-gray-400 text-sm font-medium">
+                  <td>Foto</td>
                   <td>Nama</td>
                   <td>Jabatan</td>
                   <td>Motto</td>
@@ -150,6 +162,13 @@ const FotoKsb: FC<FotoKsbProps> = () => {
                 {data?.map((item: FotoKsbProps, index: number) => {
                   return (
                     <tr className="border-b-gray-200">
+                      <td>
+                        <img
+                          src={"http://127.0.0.1:8000/storage/" + item?.foto}
+                          alt=""
+                          className="w-56"
+                        />
+                      </td>
                       <td>{item?.nama}</td>
                       <td>{item?.jabatan}</td>
                       <td>{item?.motto}</td>
@@ -175,7 +194,10 @@ const FotoKsb: FC<FotoKsbProps> = () => {
                 <div className="mb-4 text-xl text-center font-bold text-black">
                   Edit KSB
                 </div>
-                <form onSubmit={editFormik.handleSubmit} encType="multipart/form-data">
+                <form
+                  onSubmit={editFormik.handleSubmit}
+                  encType="multipart/form-data"
+                >
                   <div className="grid grid-cols-2 gap-x-5">
                     <div>
                       <Input
@@ -188,8 +210,7 @@ const FotoKsb: FC<FotoKsbProps> = () => {
                         onBlur={editFormik.handleBlur}
                         required
                       />
-                      {editFormik.touched.nama &&
-                      editFormik.errors.nama ? (
+                      {editFormik.touched.nama && editFormik.errors.nama ? (
                         <div className="text-red-500 focus:outline-red-500 text-sm font-medium pb-2">
                           {editFormik.errors.nama}
                         </div>
@@ -271,24 +292,30 @@ const FotoKsb: FC<FotoKsbProps> = () => {
                     </div>
                   </div>
                   <div>
-                      <Input
-                        admin
-                        type="file"
-                        label="Foto Upload"
-                        placeholder="Masukkan Foto"
-                        name="foto"
-                        onChange={event => editFormik.setFieldValue('foto', event.currentTarget.files[0])}
-                        onBlur={editFormik.handleBlur}
-                        required
-                      />
-                      <div className="text-xs text-gray-400">Jika tidak ingin mengganti foto tidak perlu mengupload</div>
-                      {editFormik.touched.foto &&
-                      editFormik.errors.foto ? (
-                        <div className="text-red-500 focus:outline-red-500 text-sm font-medium pb-2">
-                          {editFormik.errors.foto}
-                        </div>
-                      ) : null}
+                    <Input
+                      admin
+                      type="file"
+                      label="Foto Upload"
+                      placeholder="Masukkan Foto"
+                      name="foto"
+                      onChange={(event) =>
+                        editFormik.setFieldValue(
+                          "foto",
+                          event.currentTarget.files[0]
+                        )
+                      }
+                      onBlur={editFormik.handleBlur}
+                      required
+                    />
+                    <div className="text-xs text-gray-400">
+                      Jika tidak ingin mengganti foto tidak perlu mengupload
                     </div>
+                    {editFormik.touched.foto && editFormik.errors.foto ? (
+                      <div className="text-red-500 focus:outline-red-500 text-sm font-medium pb-2">
+                        {editFormik.errors.foto}
+                      </div>
+                    ) : null}
+                  </div>
                   <div>
                     <label
                       className={`text-[#697a8d] text-sm mb-1 after:content-["*"] after:text-red-600 after:ml-1 `}

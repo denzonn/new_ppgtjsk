@@ -5,6 +5,7 @@ import Sidebar from "../../../component/Sidebar";
 import { useState, useEffect, FC } from "react";
 import Cookie from "js-cookie";
 import axios from "axios";
+import storage from "axios";
 import toast from "react-hot-toast";
 import { useFormik } from "formik";
 import { validateBidang } from "../../../validation/auth";
@@ -16,7 +17,7 @@ interface BidangProps {
   foto_bidang: string;
 }
 
-const InputBidang: FC<BidangProps> = ({ nama_bidang, foto_bidang }) => {
+const InputBidang= () => {
   const rootElement = document.documentElement;
   rootElement.style.backgroundColor = "#FAFAFA";
 
@@ -51,13 +52,13 @@ const InputBidang: FC<BidangProps> = ({ nama_bidang, foto_bidang }) => {
     validationSchema: validateBidang,
     onSubmit: (values) => {
       const formData = new FormData();
-      formData.append('nama_bidang', values.nama_bidang);
-      formData.append('foto_bidang', values.foto_bidang);
+      formData.append("nama_bidang", values.nama_bidang);
+      formData.append("foto_bidang", values.foto_bidang);
 
       axios
         .post("bidang", formData, {
           headers: {
-            'Content-Type': 'multipart/form-data',
+            "Content-Type": "multipart/form-data",
             Authorization: `Bearer ${token}`,
           },
         })
@@ -71,12 +72,18 @@ const InputBidang: FC<BidangProps> = ({ nama_bidang, foto_bidang }) => {
         .catch((err) => {
           if (err.response && err.response.data && err.response.data.message) {
             toast.error(err.response.data.message);
-          } else if (err.response && err.response.data && err.response.data.errors) {
-            const errorMessages = Object.values(err.response.data.errors).flat();
-            toast.error(errorMessages.join('\n'));
+          } else if (
+            err.response &&
+            err.response.data &&
+            err.response.data.errors
+          ) {
+            const errorMessages = Object.values(
+              err.response.data.errors
+            ).flat();
+            toast.error(errorMessages.join("\n"));
           } else {
             // If the error doesn't have the expected structure, display a generic error message
-            toast.error('An error occurred. Please try again.');
+            toast.error("An error occurred. Please try again.");
           }
         });
     },
@@ -98,39 +105,37 @@ const InputBidang: FC<BidangProps> = ({ nama_bidang, foto_bidang }) => {
   };
 
   const initializeFormik = (data: any) => {
-    editFormik.setValues({
-      nama_bidang: data?.nama_bidang || "",
-      foto_bidang: data?.foto_bidang || null,
-    });
+    editFormik.setFieldValue("nama_bidang", data?.nama_bidang || "");
+    editFormik.setFieldValue("foto_bidang", data?.foto_bidang || null);
   };
 
   const editFormik = useFormik({
     initialValues: {
       nama_bidang: "",
-      foto_bidang: null
+      foto_bidang: null,
     },
     validationSchema: validateBidang,
     onSubmit: (values) => {
       const formData = new FormData();
-      formData.append('nama_bidang', values.nama_bidang);
-      formData.append('foto_bidang', values.foto_bidang);
+      formData.append("nama_bidang", values.nama_bidang);
+      formData.append("foto_bidang", values.foto_bidang);
+      formData.append('_method', 'PUT')
 
       axios
-        .put(`bidang/${id}`, formData, {
+        .post(`bidang/${id}`, formData, {
           headers: {
-            'Content-Type': 'multipart/form-data',
+            "Content-Type": "multipart/form-data",
             Authorization: `Bearer ${token}`,
           },
         })
-        .then((response) => {
-          console.log('Response:', response.data);
+        .then(() => {
           toast.success("Berhasil Mengupdate Bidang");
           setEdit(false);
           getData();
           editFormik.resetForm();
         })
         .catch((err) => {
-          toast.error(err.message); 
+          toast.error(err.message);
         });
     },
   });
@@ -209,8 +214,7 @@ const InputBidang: FC<BidangProps> = ({ nama_bidang, foto_bidang }) => {
                         <td>
                           <img
                             src={
-                              `http://127.0.0.1:8000/storage/` +
-                              item?.foto_bidang
+                              "http://127.0.0.1:8000/storage/" + item?.foto_bidang
                             }
                             alt=""
                             className="w-56"
@@ -243,14 +247,21 @@ const InputBidang: FC<BidangProps> = ({ nama_bidang, foto_bidang }) => {
         </div>
       </main>
       {add && (
-        <Popup onConfirm={() => {setAdd(false), formik.resetForm()}}>
+        <Popup
+          onConfirm={() => {
+            setAdd(false), formik.resetForm();
+          }}
+        >
           <div className="relative w-[60vw] max-h-full">
             <div className="relative w-full bg-white rounded-lg shadow">
               <div className="px-6 py-6 lg:px-8">
                 <div className="mb-4 text-xl text-center font-bold text-black">
                   Tambahkan Bidang
                 </div>
-                <form onSubmit={formik.handleSubmit} encType="multipart/form-data">
+                <form
+                  onSubmit={formik.handleSubmit}
+                  encType="multipart/form-data"
+                >
                   <div>
                     <Input
                       admin
@@ -275,7 +286,12 @@ const InputBidang: FC<BidangProps> = ({ nama_bidang, foto_bidang }) => {
                       label="Foto Bidang"
                       placeholder="Masukkan Foto Bidang"
                       name="foto_bidang"
-                      onChange={event => formik.setFieldValue('foto_bidang', event.currentTarget.files[0])}
+                      onChange={(event) =>
+                        formik.setFieldValue(
+                          "foto_bidang",
+                          event.currentTarget.files[0]
+                        )
+                      }
                       onBlur={formik.handleBlur}
                       required
                     />
@@ -306,7 +322,10 @@ const InputBidang: FC<BidangProps> = ({ nama_bidang, foto_bidang }) => {
                 <div className="mb-4 text-xl text-center font-bold text-black">
                   Edit Bidang
                 </div>
-                <form onSubmit={editFormik.handleSubmit} encType="multipart/form-data">
+                <form
+                  onSubmit={editFormik.handleSubmit}
+                  encType="multipart/form-data"
+                >
                   <div>
                     <Input
                       admin
@@ -318,7 +337,8 @@ const InputBidang: FC<BidangProps> = ({ nama_bidang, foto_bidang }) => {
                       onBlur={editFormik.handleBlur}
                       required
                     />
-                    {editFormik.touched.nama_bidang && editFormik.errors.nama_bidang ? (
+                    {editFormik.touched.nama_bidang &&
+                    editFormik.errors.nama_bidang ? (
                       <div className="text-red-500 focus:outline-red-500 text-sm font-medium pb-2">
                         {editFormik.errors.nama_bidang}
                       </div>
@@ -331,11 +351,17 @@ const InputBidang: FC<BidangProps> = ({ nama_bidang, foto_bidang }) => {
                       label="Foto Bidang"
                       placeholder="Masukkan Foto Bidang"
                       name="foto_bidang"
-                      onChange={event => editFormik.setFieldValue('foto_bidang', event.currentTarget.files[0])}
+                      onChange={(event) =>
+                        editFormik.setFieldValue(
+                          "foto_bidang",
+                          event.currentTarget.files[0]
+                        )
+                      }
                       onBlur={editFormik.handleBlur}
                       required
                     />
-                    {editFormik.touched.foto_bidang && editFormik.errors.foto_bidang ? (
+                    {editFormik.touched.foto_bidang &&
+                    editFormik.errors.foto_bidang ? (
                       <div className="text-red-500 focus:outline-red-500 text-sm font-medium pb-2">
                         {editFormik.errors.foto_bidang}
                       </div>

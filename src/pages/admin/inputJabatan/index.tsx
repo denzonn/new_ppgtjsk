@@ -15,7 +15,7 @@ interface jabatanProps {
   nama_jabatan: string;
 }
 
-const InputJabatan: FC<jabatanProps> = ({ nama_jabatan }) => {
+const InputJabatan = () => {
   const rootElement = document.documentElement;
   rootElement.style.backgroundColor = "#FAFAFA";
 

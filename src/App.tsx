@@ -33,10 +33,12 @@ import SaranAdmin from "./pages/admin/saran";
 import InputJabatanAdmin from "./pages/admin/inputJabatan";
 import InputBidangAdmin from "./pages/admin/inputBidang";
 import axios from "axios";
+import storage from "axios"
 import Login from "./pages/general/login";
 import { Toaster } from "react-hot-toast";
 
 const App = () => {
+  storage.defaults.baseURL = "http://127.0.0.1:8000/storage/";
   axios.defaults.baseURL = "http://127.0.0.1:8000/api/";
 
   return (

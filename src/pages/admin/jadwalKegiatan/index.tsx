@@ -45,7 +45,7 @@ const formatDate = (dateString: string) => {
   return `${day}, ${dayOfMonth} ${month} ${year}`;
 };
 
-const JadwalKegiatan: FC<JadwalKegiatanProps> = () => {
+const JadwalKegiatan = () => {
   const rootElement = document.documentElement;
   rootElement.style.backgroundColor = "#FAFAFA";
 

@@ -48,3 +48,10 @@ export const validateBidang = yup.object({
   nama_bidang: yup.string().required("Anda Harus Memasukkan Nama Bidang"),
   foto_bidang: yup.mixed().required('Anda Harus Mengupload Foto'),
 });
+
+export const validatePengurus = yup.object({
+  nama_anggota: yup.string().required("Anda Harus Memasukkan Nama Bidang"),
+  foto: yup.mixed().required('Anda Harus Mengupload Foto'),
+  jabatans_id: yup.number().required("Anda Harus Memasukkan Jabatan"),
+  bidangs_id: yup.number().required("Anda Harus Memasukkan Nama Bidang"),
+});
