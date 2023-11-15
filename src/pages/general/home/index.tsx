@@ -7,12 +7,15 @@ import { Link } from "react-router-dom";
 import Input from "../../../component/Input";
 import Footer from "../../../component/Footer";
 import { useMediaQuery } from "react-responsive";
+import axios from 'axios'
+import Cookie from 'js-cookie'
 
 const Home = () => {
   const [typedText, setTypedText] = useState("PENGURUS PPGT 2022 - 2024");
   const [openCard, setOpenCard] = useState<boolean>(false);
   const isLGScreen = useMediaQuery({ minWidth: 1024 });
   const [hovered, setHovered] = useState(false);
+  // const token = Cookie.get('token')
 
   useEffect(() => {
     const typed = new Typed("#home", {

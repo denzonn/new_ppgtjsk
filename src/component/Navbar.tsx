@@ -1,5 +1,5 @@
-import { AnimatePresence, color, motion } from "framer-motion";
-import React, { useEffect, useState } from "react";
+import { AnimatePresence, motion } from "framer-motion";
+import { useEffect, useState } from "react";
 import { Link } from "react-router-dom";
 
 const content = {
@@ -201,9 +201,9 @@ const Navbar = () => {
               >
                 <div className="font-light grid grid-cols-2 gap-y-4 gap-x-14 text-lg col-span-2 px-6 text-[#878787]">
                   <Link to={"/profil-ppgt"} className="hover:text-font">Profile</Link>
-                  <Link to={"/profil-ppgt"} className="hover:text-font">Dokument</Link>
-                  <Link to={"/profil-ppgt"} className="hover:text-font">Kegiatan</Link>
-                  <Link to={"/profil-ppgt"} className="hover:text-font">Gallery</Link>
+                  <Link to={"/dokument"} className="hover:text-font">Dokument</Link>
+                  <Link to={"/kegiatan"} className="hover:text-font">Kegiatan</Link>
+                  <Link to={"/gallery"} className="hover:text-font">Gallery</Link>
                 </div>
               </div>
             </motion.div>

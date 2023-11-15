@@ -25,6 +25,10 @@
   box-shadow: 0px 5px 12px -2px rgba(211, 211, 211, 0.2);
 }
 
+.galleryShadow {
+  box-shadow: 0.3rem 0.4rem 0.4rem rgba(0, 0, 0, 0.1);
+}
+
 .shadowDropdown {
   box-shadow: 0 20px 30px rgba(57, 76, 96, 0.06);
 }
@@ -47,4 +51,27 @@
 
 .checbox-border {
   border: 1px solid rgba(0, 0, 0, 0.25);
+}
+
+::-webkit-scrollbar {
+  width: 4px;
+}
+
+.slides::-webkit-scrollbar-thumb {
+  transition: 0.5s ease-in-out;
+}
+
+.slides:hover::-webkit-scrollbar-thumb {
+  background-color: #c2c2c271;
+  position: absolute;
+  top: 500px;
+  right: 0;
+  border-radius: 10px;
+}
+
+.bgImage{
+  background-image: url('../public/image.jpg');
+  background-position: center;
+  background-repeat: no-repeat;
+  background-size: cover;
 }
