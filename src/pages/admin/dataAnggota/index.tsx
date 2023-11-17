@@ -91,7 +91,6 @@ const DataAnggota = () => {
     validationSchema: validateDataAnggota,
     onSubmit: (values) => {
       console.log(values);
-
     },
   });
 
@@ -171,7 +170,7 @@ const DataAnggota = () => {
           }}
         >
           <div className="relative w-[60vw] h-full overflow-y-auto">
-            <div className=" w-full bg-white rounded-lg shadow mt-48">
+            <div className=" w-full bg-white rounded-lg shadow max-h-[90vh] overflow-auto scroll">
               <div className="px-6 py-6 lg:px-8">
                 <div className="mb-4 text-xl text-center font-bold text-black">
                   Tambahkan Anggota
@@ -262,7 +261,8 @@ const DataAnggota = () => {
                         onBlur={formik.handleBlur}
                         required
                       />
-                      {formik.touched.tempat_lahir && formik.errors.tempat_lahir ? (
+                      {formik.touched.tempat_lahir &&
+                      formik.errors.tempat_lahir ? (
                         <div className="text-red-500 focus:outline-red-500 text-sm font-medium pb-2">
                           {formik.errors.tempat_lahir}
                         </div>
@@ -280,7 +280,8 @@ const DataAnggota = () => {
                         onBlur={formik.handleBlur}
                         required
                       />
-                      {formik.touched.tanggal_lahir && formik.errors.tanggal_lahir ? (
+                      {formik.touched.tanggal_lahir &&
+                      formik.errors.tanggal_lahir ? (
                         <div className="text-red-500 focus:outline-red-500 text-sm font-medium pb-2">
                           {formik.errors.tanggal_lahir}
                         </div>
@@ -309,55 +310,235 @@ const DataAnggota = () => {
                   </div>
                   <div className="grid grid-cols-3 gap-x-5">
                     <div>
-                      <Input
-                        admin
-                        type="number"
-                        label="No HP"
-                        placeholder="Masukkan No HP"
-                        name="no_hp"
-                        value={formik.values.no_hp}
+                      <label
+                        className={`text-[#697a8d] text-sm mb-1 after:content-["*"] after:text-red-600 after:ml-1 `}
+                      >
+                        Jenis Kelamin
+                      </label>
+                      <select
+                        className="select select-bordered w-full bg-transparent mt-2 mb-4 focus:outline-none text-[#697a8d]"
+                        name="jenis_kelamin"
                         onChange={formik.handleChange}
-                        onBlur={formik.handleBlur}
-                        required
-                      />
-                      {formik.touched.no_hp && formik.errors.no_hp ? (
+                      >
+                        <option disabled selected>
+                          Pilih Jenis Kelamin
+                        </option>
+                        <option value="Laki-laki">Laki-Laki</option>
+                        <option value="Perempuan">Perempuan</option>
+                      </select>
+                      {formik.touched.jenis_kelamin &&
+                      formik.errors.jenis_kelamin ? (
                         <div className="text-red-500 focus:outline-red-500 text-sm font-medium pb-2">
-                          {formik.errors.no_hp}
+                          {formik.errors.jenis_kelamin}
                         </div>
                       ) : null}
                     </div>
                     <div>
-                      <Input
-                        admin
-                        label="Tempat Lahir"
-                        placeholder="Masukkan Tempat Lahir"
-                        name="tempat_lahir"
-                        value={formik.values.tempat_lahir}
+                      <label
+                        className={`text-[#697a8d] text-sm mb-1 after:content-["*"] after:text-red-600 after:ml-1 `}
+                      >
+                        Golongan Darah
+                      </label>
+                      <select
+                        className="select select-bordered w-full bg-transparent mt-2 mb-4 focus:outline-none text-[#697a8d]"
+                        name="golongan_darah"
                         onChange={formik.handleChange}
-                        onBlur={formik.handleBlur}
-                        required
-                      />
-                      {formik.touched.tempat_lahir && formik.errors.tempat_lahir ? (
+                      >
+                        <option disabled selected>
+                          Pilih Golongan Darah
+                        </option>
+                        <option value="A">A</option>
+                        <option value="B">B</option>
+                        <option value="AB">AB</option>
+                        <option value="O">O</option>
+                        <option value="Tidak Tahu">Tidak Tahu</option>
+                      </select>
+                      {formik.touched.golongan_darah &&
+                      formik.errors.golongan_darah ? (
                         <div className="text-red-500 focus:outline-red-500 text-sm font-medium pb-2">
-                          {formik.errors.tempat_lahir}
+                          {formik.errors.golongan_darah}
                         </div>
                       ) : null}
                     </div>
                     <div>
-                      <Input
-                        admin
-                        type="date"
-                        label="Tanggal Lahir"
-                        placeholder="Masukkan Tanggal Lahir"
-                        name="tanggal_lahir"
-                        value={formik.values.tanggal_lahir}
+                      <label
+                        className={`text-[#697a8d] text-sm mb-1 after:content-["*"] after:text-red-600 after:ml-1 `}
+                      >
+                        Rhesus
+                      </label>
+                      <select
+                        className="select select-bordered w-full bg-transparent mt-2 mb-4 focus:outline-none text-[#697a8d]"
+                        name="rhesus"
                         onChange={formik.handleChange}
-                        onBlur={formik.handleBlur}
-                        required
-                      />
-                      {formik.touched.tanggal_lahir && formik.errors.tanggal_lahir ? (
+                      >
+                        <option disabled selected>
+                          Pilih Rhesus
+                        </option>
+                        <option value="+">+</option>
+                        <option value="-">-</option>
+                        <option value="Tidak Tahu">Tidak Tahu</option>
+                      </select>
+                      {formik.touched.rhesus && formik.errors.rhesus ? (
                         <div className="text-red-500 focus:outline-red-500 text-sm font-medium pb-2">
-                          {formik.errors.tanggal_lahir}
+                          {formik.errors.rhesus}
+                        </div>
+                      ) : null}
+                    </div>
+                  </div>
+                  <div className="grid grid-cols-3 gap-x-5">
+                    <div>
+                      <label
+                        className={`text-[#697a8d] text-sm mb-1 after:content-["*"] after:text-red-600 after:ml-1 `}
+                      >
+                        Apakah Bersedia Mendonor Darah?
+                      </label>
+                      <select
+                        className="select select-bordered w-full bg-transparent mt-2 mb-4 focus:outline-none text-[#697a8d]"
+                        name="bersedia"
+                        onChange={formik.handleChange}
+                      >
+                        <option disabled selected>
+                          Pilih Apakah Bersedia Mendonor Darah?
+                        </option>
+                        <option value="Bersedia">Bersedia</option>
+                        <option value="Tidak Bersedia">Tidak Bersedia</option>
+                      </select>
+                      {formik.touched.bersedia && formik.errors.bersedia ? (
+                        <div className="text-red-500 focus:outline-red-500 text-sm font-medium pb-2">
+                          {formik.errors.bersedia}
+                        </div>
+                      ) : null}
+                    </div>
+                    <div>
+                      <label
+                        className={`text-[#697a8d] text-sm mb-1 after:content-["*"] after:text-red-600 after:ml-1 `}
+                      >
+                        Status
+                      </label>
+                      <select
+                        className="select select-bordered w-full bg-transparent mt-2 mb-4 focus:outline-none text-[#697a8d]"
+                        name="status"
+                        onChange={formik.handleChange}
+                      >
+                        <option disabled selected>
+                          Pilih Status
+                        </option>
+                        <option value="Menikah">Menikah</option>
+                        <option value="Belum Menikah">Belum Menikah</option>
+                      </select>
+                      {formik.touched.status && formik.errors.status ? (
+                        <div className="text-red-500 focus:outline-red-500 text-sm font-medium pb-2">
+                          {formik.errors.status}
+                        </div>
+                      ) : null}
+                    </div>
+                    <div>
+                      <label
+                        className={`text-[#697a8d] text-sm mb-1 after:content-["*"] after:text-red-600 after:ml-1 `}
+                      >
+                        Keanggotaan
+                      </label>
+                      <select
+                        className="select select-bordered w-full bg-transparent mt-2 mb-4 focus:outline-none text-[#697a8d]"
+                        name="keanggotaan"
+                        onChange={formik.handleChange}
+                      >
+                        <option disabled selected>
+                          Pilih Keanggotaan
+                        </option>
+                        <option value="SIDI">SIDI</option>
+                        <option value="BAPTIS">BAPTIS</option>
+                        <option value="BAPTIS DEWASA">BAPTIS DEWASA</option>
+                        <option value="BELUM">BELUM</option>
+                      </select>
+                      {formik.touched.keanggotaan &&
+                      formik.errors.keanggotaan ? (
+                        <div className="text-red-500 focus:outline-red-500 text-sm font-medium pb-2">
+                          {formik.errors.keanggotaan}
+                        </div>
+                      ) : null}
+                    </div>
+                  </div>
+                  <div className="grid grid-cols-3 gap-x-5">
+                    <div>
+                      <label
+                        className={`text-[#697a8d] text-sm mb-1 after:content-["*"] after:text-red-600 after:ml-1 `}
+                      >
+                        Pendidikan Terakhir
+                      </label>
+                      <select
+                        className="select select-bordered w-full bg-transparent mt-2 mb-4 focus:outline-none text-[#697a8d]"
+                        name="pendidikan"
+                        onChange={formik.handleChange}
+                      >
+                        <option disabled selected>
+                          Pilih Pendidikan Terakhir
+                        </option>
+                        <option value="SD / Sederajat">SD / Sederajat</option>
+                        <option value="SMP / Sederajat">SMP / Sederajat</option>
+                        <option value="SMA / Sederajat">SMA / Sederajat</option>
+                        <option value="D3 (Diploma)">D3 (Diploma)</option>
+                        <option value="S1 (Sarjana)">S1 (Sarjana)</option>
+                        <option value="S2 (Magister)">S2 (Magister)</option>
+                        <option value="S3 (Doktor)">S3 (Doktor)</option>
+                      </select>
+                      {formik.touched.pendidikan && formik.errors.pendidikan ? (
+                        <div className="text-red-500 focus:outline-red-500 text-sm font-medium pb-2">
+                          {formik.errors.pendidikan}
+                        </div>
+                      ) : null}
+                    </div>
+                    <div>
+                      <label
+                        className={`text-[#697a8d] text-sm mb-1 after:content-["*"] after:text-red-600 after:ml-1 `}
+                      >
+                        Pekerjaan
+                      </label>
+                      <select
+                        className="select select-bordered w-full bg-transparent mt-2 mb-4 focus:outline-none text-[#697a8d]"
+                        name="pekerjaan"
+                        onChange={formik.handleChange}
+                      >
+                        <option disabled selected>
+                          Pilih Pekerjaan
+                        </option>
+                        <option value="Pelajar">Pelajar</option>
+                        <option value="Mahasiswa">Mahasiswa</option>
+                        <option value="PNS">PNS</option>
+                        <option value="Wiraswasta">Wiraswasta</option>
+                        <option value="Wirausaha">Wirausaha</option>
+                        <option value="Lainnya">Lainnya</option>
+                      </select>
+                      {formik.touched.pekerjaan && formik.errors.pekerjaan ? (
+                        <div className="text-red-500 focus:outline-red-500 text-sm font-medium pb-2">
+                          {formik.errors.pekerjaan}
+                        </div>
+                      ) : null}
+                    </div>
+                    <div>
+                      <label
+                        className={`text-[#697a8d] text-sm mb-1 after:content-["*"] after:text-red-600 after:ml-1 `}
+                      >
+                        Domisili
+                      </label>
+                      <select
+                        className="select select-bordered w-full bg-transparent mt-2 mb-4 focus:outline-none text-[#697a8d]"
+                        name="domisili"
+                        onChange={formik.handleChange}
+                      >
+                        <option disabled selected>
+                          Pilih Keterangan Domisili
+                        </option>
+                        <option value="Di Dalam Wilayah Pelayanan">
+                          Di Dalam Wilayah Pelayanan
+                        </option>
+                        <option value="Di Luar Wilayah Pelayanan">
+                          Di Luar Wilayah Pelayanan
+                        </option>
+                      </select>
+                      {formik.touched.domisili && formik.errors.domisili ? (
+                        <div className="text-red-500 focus:outline-red-500 text-sm font-medium pb-2">
+                          {formik.errors.domisili}
                         </div>
                       ) : null}
                     </div>
@@ -366,108 +547,116 @@ const DataAnggota = () => {
                     <div>
                       <Input
                         admin
-                        type="number"
-                        label="No HP"
-                        placeholder="Masukkan No HP"
-                        name="no_hp"
-                        value={formik.values.no_hp}
+                        label="Nama Ayah"
+                        placeholder="Masukkan Nama Ayah"
+                        name="nama_ayah"
+                        value={formik.values.nama_ayah}
                         onChange={formik.handleChange}
                         onBlur={formik.handleBlur}
                         required
                       />
-                      {formik.touched.no_hp && formik.errors.no_hp ? (
+                      {formik.touched.nama_ayah && formik.errors.nama_ayah ? (
                         <div className="text-red-500 focus:outline-red-500 text-sm font-medium pb-2">
-                          {formik.errors.no_hp}
+                          {formik.errors.nama_ayah}
                         </div>
                       ) : null}
                     </div>
                     <div>
                       <Input
                         admin
-                        label="Tempat Lahir"
-                        placeholder="Masukkan Tempat Lahir"
-                        name="tempat_lahir"
-                        value={formik.values.tempat_lahir}
+                        label="Nama Ibu"
+                        placeholder="Masukkan Nama Ibu"
+                        name="nama_ibu"
+                        value={formik.values.nama_ibu}
                         onChange={formik.handleChange}
                         onBlur={formik.handleBlur}
                         required
                       />
-                      {formik.touched.tempat_lahir && formik.errors.tempat_lahir ? (
+                      {formik.touched.nama_ibu && formik.errors.nama_ibu ? (
                         <div className="text-red-500 focus:outline-red-500 text-sm font-medium pb-2">
-                          {formik.errors.tempat_lahir}
+                          {formik.errors.nama_ibu}
                         </div>
                       ) : null}
                     </div>
+
                     <div>
-                      <Input
-                        admin
-                        type="date"
-                        label="Tanggal Lahir"
-                        placeholder="Masukkan Tanggal Lahir"
-                        name="tanggal_lahir"
-                        value={formik.values.tanggal_lahir}
+                      <label
+                        className={`text-[#697a8d] text-sm mb-4 after:content-["*"] after:text-red-600 after:ml-1 `}
+                      >
+                        Keterangan Tinggal
+                      </label>
+                      <select
+                        className="select select-bordered w-full bg-transparent mb-4 focus:outline-none text-[#697a8d] max-h-[2.6rem] min-h-[2.6rem]"
+                        name="keterangan_tinggal"
                         onChange={formik.handleChange}
-                        onBlur={formik.handleBlur}
-                        required
-                      />
-                      {formik.touched.tanggal_lahir && formik.errors.tanggal_lahir ? (
+                      >
+                        <option disabled selected>
+                          Pilih Keterangan Tinggal
+                        </option>
+                        <option value="Bersama Orang Tua">
+                          Bersama Orang Tua
+                        </option>
+                        <option value="Rumah Keluarga">Rumah Keluarga</option>
+                        <option value="Kos-kosan">Kos-kosan</option>
+                        <option value="Asrama">Asrama</option>
+                      </select>
+                      {formik.touched.keterangan_tinggal &&
+                      formik.errors.keterangan_tinggal ? (
                         <div className="text-red-500 focus:outline-red-500 text-sm font-medium pb-2">
-                          {formik.errors.tanggal_lahir}
+                          {formik.errors.keterangan_tinggal}
                         </div>
                       ) : null}
                     </div>
                   </div>
                   <div className="grid grid-cols-3 gap-x-5">
-                    <div>
-                      <Input
-                        admin
-                        type="number"
-                        label="No HP"
-                        placeholder="Masukkan No HP"
-                        name="no_hp"
-                        value={formik.values.no_hp}
+                    <div className="col-span-2">
+                      <label
+                        className={`text-[#697a8d] text-sm mb-1 after:content-["*"] after:text-red-600 after:ml-1 `}
+                      >
+                        Wilayah Kelompok
+                      </label>
+                      <select
+                        className="select select-bordered w-full bg-transparent mb-4 focus:outline-none text-[#697a8d] h-[2.8rem] max-h-[2.7rem] min-h-[2.7rem]"
+                        name="wilayah"
                         onChange={formik.handleChange}
-                        onBlur={formik.handleBlur}
-                        required
-                      />
-                      {formik.touched.no_hp && formik.errors.no_hp ? (
+                      >
+                        <option disabled selected>
+                          Pilih Wilayah Kelompok
+                        </option>
+                        <option value="Kelompok 1">Kelompok 1</option>
+                        <option value="Kelompok 2">Kelompok 2</option>
+                      </select>
+                      {formik.touched.wilayah && formik.errors.wilayah ? (
                         <div className="text-red-500 focus:outline-red-500 text-sm font-medium pb-2">
-                          {formik.errors.no_hp}
+                          {formik.errors.wilayah}
                         </div>
                       ) : null}
                     </div>
                     <div>
-                      <Input
-                        admin
-                        label="Tempat Lahir"
-                        placeholder="Masukkan Tempat Lahir"
-                        name="tempat_lahir"
-                        value={formik.values.tempat_lahir}
+                      <label
+                        className={`text-[#697a8d] text-sm mb-1 after:content-["*"] after:text-red-600 after:ml-1 `}
+                      >
+                        Keterangan Tinggal
+                      </label>
+                      <select
+                        className="select select-bordered w-full bg-transparent mb-4 focus:outline-none text-[#697a8d]"
+                        name="keterangan_tinggal"
                         onChange={formik.handleChange}
-                        onBlur={formik.handleBlur}
-                        required
-                      />
-                      {formik.touched.tempat_lahir && formik.errors.tempat_lahir ? (
+                      >
+                        <option disabled selected>
+                          Pilih Keterangan Tinggal
+                        </option>
+                        <option value="Bersama Orang Tua">
+                          Bersama Orang Tua
+                        </option>
+                        <option value="Rumah Keluarga">Rumah Keluarga</option>
+                        <option value="Kos-kosan">Kos-kosan</option>
+                        <option value="Asrama">Asrama</option>
+                      </select>
+                      {formik.touched.keterangan_tinggal &&
+                      formik.errors.keterangan_tinggal ? (
                         <div className="text-red-500 focus:outline-red-500 text-sm font-medium pb-2">
-                          {formik.errors.tempat_lahir}
-                        </div>
-                      ) : null}
-                    </div>
-                    <div>
-                      <Input
-                        admin
-                        type="date"
-                        label="Tanggal Lahir"
-                        placeholder="Masukkan Tanggal Lahir"
-                        name="tanggal_lahir"
-                        value={formik.values.tanggal_lahir}
-                        onChange={formik.handleChange}
-                        onBlur={formik.handleBlur}
-                        required
-                      />
-                      {formik.touched.tanggal_lahir && formik.errors.tanggal_lahir ? (
-                        <div className="text-red-500 focus:outline-red-500 text-sm font-medium pb-2">
-                          {formik.errors.tanggal_lahir}
+                          {formik.errors.keterangan_tinggal}
                         </div>
                       ) : null}
                     </div>

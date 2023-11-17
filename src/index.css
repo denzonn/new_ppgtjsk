@@ -58,11 +58,26 @@
 }
 
 .slides::-webkit-scrollbar-thumb {
+  position: absolute;
+  top: 0;
+  right: 0;
   transition: 0.5s ease-in-out;
 }
 
 .slides:hover::-webkit-scrollbar-thumb {
   background-color: #c2c2c271;
+  position: absolute;
+  top: 500px;
+  right: 0;
+  border-radius: 10px;
+}
+
+.scroll::-webkit-scrollbar-thumb {
+  transition: 0.5s ease-in-out;
+}
+
+.scroll:hover::-webkit-scrollbar-thumb {
+  background-color: #53535371;
   position: absolute;
   top: 500px;
   right: 0;
