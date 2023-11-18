@@ -20,7 +20,6 @@ const InputJabatan = () => {
   rootElement.style.backgroundColor = "#FAFAFA";
 
   const [data, setData] = useState<jabatanProps>();
-  const [dataEdit, setDataEdit] = useState<jabatanProps>();
   const token = Cookie.get("token");
   const [id, setId] = useState<number>(0);
 
@@ -85,7 +84,6 @@ const InputJabatan = () => {
       })
       .then((res) => {
         setEdit(!edit);
-        setDataEdit(res?.data?.data);
         setId(res?.data?.data?.id);
         initializeFormik(res?.data?.data);
       });

@@ -69,7 +69,7 @@ const Input: FC<InputProps> = ({
         <div className="flex flex-col">
           <label
             htmlFor=""
-            className={`text-[#697a8d] text-sm mb-1 ${
+            className={`text-[#697a8d] text-sm mb-2 ${
               required
                 ? 'after:content-["*"] after:text-red-600 after:ml-1'
                 : ""
