@@ -79,30 +79,63 @@ export const validateDokument = yup.object({
 });
 
 export const validateDataAnggota = yup.object({
-  // nik: yup.number().required("Anda Harus Memasukkan Judul"),
-  // nama: yup.string().required("Anda Harus Memasukkan Judul"),
-  // email: yup
-  //   .string()
-  //   .required("Anda Harus Memasukkan Email")
-  //   .matches(
-  //     /^[A-Za-z0-9._%+-]+@[A-Za-z0-9.-]+\.[A-Za-z]{2,4}$/,
-  //     "Emails harus menggunakan @"
-  //   ),
-  // no_hp: yup.number().required("Anda Harus Memasukkan Judul"),
-  // tempat_lahir: yup.string().required("Anda Harus Memasukkan Tempat Lahir"),
-  // tanggal_lahir: yup.string().required("Anda Harus Memasukkan Tanggal Lahir"),
-  // alamat: yup.string().required("Anda Harus Memasukkan Alamat"),
-  // jenis_kelamin: yup.string().required("Anda Harus Memasukkan Jenis kelamin"),
-  // golongan_darah: yup.string().required("Anda Harus Memasukkan Golongan Darah"),
-  // rhesus: yup.string().required("Anda Harus Memasukkan Rhesus"),
-  // bersedia: yup.string().required("Anda Harus Memilih Kebersediaan"),
-  // status: yup.string().required("Anda Harus Memasukkan Status"),
-  // keanggotaan: yup.string().required("Anda Harus Memasukkan Keanggotaan"),
-  // pendidikan: yup.string().required("Anda Harus Memasukkan Pendidikan"),
-  // pekerjaan: yup.string().required("Anda Harus Memasukkan Pekerjaan"),
-  // domisili: yup.string().required("Anda Harus Memasukkan Domisili"),
-  // nama_ayah: yup.string().required("Anda Harus Memasukkan Nama Ayah"),
-  // nama_ibu: yup.string().required("Anda Harus Memasukkan Nama Ibu"),
-  // keterangan_tinggal: yup.string().required("Anda Harus Memasukkan Keterangan Tinggal"),
-  // wilayah: yup.string().required("Anda Harus Memasukkan Wilayah"),
+  nik: yup.number().required("Anda Harus Memasukkan Judul"),
+  nama: yup.string().required("Anda Harus Memasukkan Judul"),
+  email: yup
+    .string()
+    .required("Anda Harus Memasukkan Email")
+    .matches(
+      /^[A-Za-z0-9._%+-]+@[A-Za-z0-9.-]+\.[A-Za-z]{2,4}$/,
+      "Emails harus menggunakan @"
+    ),
+  no_hp: yup.number().required("Anda Harus Memasukkan Judul"),
+  tempat_lahir: yup.string().required("Anda Harus Memasukkan Tempat Lahir"),
+  tanggal_lahir: yup.string().required("Anda Harus Memasukkan Tanggal Lahir"),
+  alamat: yup.string().required("Anda Harus Memasukkan Alamat"),
+  jenis_kelamin: yup.string().required("Anda Harus Memasukkan Jenis kelamin"),
+  golongan_darah: yup.string().required("Anda Harus Memasukkan Golongan Darah"),
+  rhesus: yup.string().required("Anda Harus Memasukkan Rhesus"),
+  bersedia: yup.string().required("Anda Harus Memilih Kebersediaan"),
+  status: yup.string().required("Anda Harus Memasukkan Status"),
+  keanggotaan: yup.string().required("Anda Harus Memasukkan Keanggotaan"),
+  pendidikan: yup.string().required("Anda Harus Memasukkan Pendidikan"),
+  pekerjaan: yup.string().required("Anda Harus Memasukkan Pekerjaan"),
+  domisili: yup.string().required("Anda Harus Memasukkan Domisili"),
+  nama_ayah: yup.string().required("Anda Harus Memasukkan Nama Ayah"),
+  nama_ibu: yup.string().required("Anda Harus Memasukkan Nama Ibu"),
+  keterangan_tinggal: yup.string().required("Anda Harus Memasukkan Keterangan Tinggal"),
+  wilayah: yup.string().required("Anda Harus Memasukkan Wilayah"),
+});
+
+export const validateKegiatan = yup.object({
+  name: yup.string().required("Anda Harus Memasukkan Name"),
+  program_id: yup.number().required("Anda Harus Memasukkan Program"),
+  description: yup.string().required("Anda Harus Memasukkan Deskripsi"),
+  photo: yup.mixed().required("Anda Harus Mengupload Foto"),
+});
+
+export const validateGallery = yup.object({
+  kegiatan_id: yup.number().required("Anda Harus Memasukkan Kegiatan"),
+  photo: yup.mixed().required("Anda Harus Mengupload Foto"),
+});
+
+export const validateJenisInventaris = yup.object({
+  nama: yup.string().required("Anda Harus Memasukkan Nama Jenis Inventaris"),
+});
+
+export const validateInventaris = yup.object({
+  nama: yup.string().required("Anda Harus Memasukkan Nama Inventaris"),
+  jenis_id: yup.number().required("Anda Harus Memasukkan Nama Jenis Inventaris"),
+  kode: yup.string().required("Anda Harus Memasukkan Kode"),
+  jumlah: yup.number().required("Anda Harus Memasukkan Jumlah"),
+  keterangan: yup.string().required("Anda Harus Memasukkan Keterangan"),
+  photo: yup.mixed().required("Anda Harus Mengupload Foto"),
+});
+
+export const validatePemasukan = yup.object({
+  tanggal: yup.string().required("Anda Harus Memasukkan Tanggal"),
+  keterangan: yup.string().required("Anda Harus Memasukkan Keterangan"),
+  jumlah: yup.number().required("Anda Harus Memasukkan Jumlah"),
+  catatan: yup.string().required("Anda Harus Memasukkan Catatan"),
+  photo: yup.mixed().required("Anda Harus Mengupload Foto"),
 });

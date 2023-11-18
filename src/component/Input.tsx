@@ -10,6 +10,7 @@ interface InputProps {
   className?: string;
   required?: boolean;
   login?: boolean;
+  multiple?: boolean;
   admin?: boolean;
   onBlur?: (event: any) => void;
   onChange?: (value: any) => void;
@@ -26,6 +27,7 @@ const Input: FC<InputProps> = ({
   required,
   login,
   admin,
+  multiple,
   onBlur,
   onChange,
 }) => {
@@ -84,6 +86,7 @@ const Input: FC<InputProps> = ({
             onChange={onChange}
             onBlur={onBlur}
             name={name}
+            multiple={multiple}
             defaultValue={defaultValue}
             className={` ${className} bg-transparent border rounded-md focus:outline-none py-[0.6rem] px-[0.875rem]  font-light text-sm mb-3  text-[#697a8d]`}
           />
