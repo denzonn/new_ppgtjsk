@@ -1,11 +1,42 @@
+import { useEffect, useState } from "react";
 import Breadcrumb from "../../../component/Breadcrumb";
 import Footer from "../../../component/Footer";
 import Search from "../../../component/Search";
 import Sidebar from "../../../component/Sidebar";
+import axios from "axios";
+import toast from "react-hot-toast";
+import Cookie from "js-cookie";
+
+interface SaranProps {
+  nama: string;
+  saran: string;
+}
 
 const Saran = () => {
   const rootElement = document.documentElement;
   rootElement.style.backgroundColor = "#FAFAFA";
+
+  const [data, setData] = useState<SaranProps>();
+  const token = Cookie.get("token");
+
+  const getData = () => {
+    axios
+      .get("saran", {
+        headers: {
+          Authorization: `Bearer ${token}`,
+        },
+      })
+      .then((res) => {
+        setData(res?.data?.data);
+      })
+      .catch((err) => {
+        toast.error(err.message);
+      });
+  };
+
+  useEffect(() => {
+    getData();
+  }, []);
 
   return (
     <section>
@@ -32,17 +63,29 @@ const Saran = () => {
                 </tr>
               </thead>
               <tbody className="text-[#344767]">
-                <tr className="border-b-gray-200">
-                  <td>Cy Ganderton</td>
-                  <td>Quality Control Specialist</td>
-                  <td>Blue</td>
-                </tr>
+                {data?.length > 0 ? (
+                  data?.map((item: SaranProps, index: number) => {
+                    return (
+                      <tr className="border-b-gray-200" key={index}>
+                        <td>{index + 1}</td>
+                        <td>{item?.nama}</td>
+                        <td>{item?.saran}</td>
+                      </tr>
+                    );
+                  })
+                ) : (
+                  <tr className="border-b-gray-200">
+                    <td colSpan={3} className="text-center">
+                      Tidak ada Sarana
+                    </td>
+                  </tr>
+                )}
               </tbody>
             </table>
           </div>
         </div>
       </main>
-      <Footer admin/>
+      <Footer admin />
     </section>
   );
 };

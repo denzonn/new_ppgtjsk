@@ -139,3 +139,25 @@ export const validatePemasukan = yup.object({
   catatan: yup.string().required("Anda Harus Memasukkan Catatan"),
   photo: yup.mixed().required("Anda Harus Mengupload Foto"),
 });
+
+export const validatePengeluaran = yup.object({
+  tanggal: yup.string().required("Anda Harus Memasukkan Tanggal"),
+  keterangan: yup.string().required("Anda Harus Memasukkan Keterangan"),
+  jumlah: yup.number().required("Anda Harus Memasukkan Jumlah"),
+  catatan: yup.string().required("Anda Harus Memasukkan Catatan"),
+  photo: yup.mixed().required("Anda Harus Mengupload Foto"),
+});
+
+export const validatePiutang = yup.object({
+  keterangan: yup.string().required("Anda Harus Memasukkan Keterangan"),
+  jumlah: yup.number().required("Anda Harus Memasukkan Jumlah"),
+  catatan: yup.string().required("Anda Harus Memasukkan Catatan"),
+  photo: yup.mixed().required("Anda Harus Mengupload Foto"),
+});
+
+export const validateIuran = yup.object({
+  nama: yup.string().required("Anda Harus Memasukkan Nama"),
+  keterangan: yup.string().required("Anda Harus Memasukkan Keterangan"),
+  jumlah: yup.number().required("Anda Harus Memasukkan Jumlah"),
+  kelompok: yup.string().required("Anda Harus Memilih Kelompok"),
+});

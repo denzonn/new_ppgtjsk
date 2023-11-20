@@ -111,7 +111,7 @@ const Navbar = () => {
         </label>
       </div>
       <div className="lg:flex hidden flex-row justify-between w-full relative">
-        <ul className="w-full gap-x-6 flex flex-row justify-between items-center py-2 text-white">
+        <ul className="w-full gap-x-6 flex flex-row justify-between items-center py-2 text-white mb-0">
           <Link
             to={"/"}
             className={`${

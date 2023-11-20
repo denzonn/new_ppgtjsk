@@ -1,13 +1,71 @@
+import axios from "axios";
 import Breadcrumb from "../../../component/Breadcrumb";
 import Button from "../../../component/Button";
 import Card from "../../../component/Card";
 import Footer from "../../../component/Footer";
 import Search from "../../../component/Search";
 import Sidebar from "../../../component/Sidebar";
+import toast from "react-hot-toast";
+import { useState, useEffect } from "react";
+import Cookie from "js-cookie";
+
+interface KeuanganProps {
+  tanggal: string;
+  keterangan: number;
+  jumlah: string;
+  jenis_transaksi: string;
+}
+
+const formatDate = (dateString: string) => {
+  const date = new Date(dateString);
+  const days = ["Minggu", "Senin", "Selasa", "Rabu", "Kamis", "Jumat", "Sabtu"];
+  const day = days[date.getDay()];
+  const dayOfMonth = date.getDate();
+  const months = [
+    "Januari",
+    "Februari",
+    "Maret",
+    "April",
+    "Mei",
+    "Juni",
+    "Juli",
+    "Agustus",
+    "September",
+    "Oktober",
+    "November",
+    "Desember",
+  ];
+  const month = months[date.getMonth()];
+  const year = date.getFullYear();
+
+  return `${day}, ${dayOfMonth} ${month} ${year}`;
+};
 
 const DataKeuangan = () => {
   const rootElement = document.documentElement;
   rootElement.style.backgroundColor = "#FAFAFA";
+
+  const [data, setData] = useState<KeuanganProps>();
+  const token = Cookie.get("token");
+
+  const getData = () => {
+    axios
+      .get("keuangan", {
+        headers: {
+          Authorization: `Bearer ${token}`,
+        },
+      })
+      .then((res) => {
+        setData(res?.data?.data);
+      })
+      .catch((err) => {
+        toast.error(err.message);
+      });
+  };
+
+  useEffect(() => {
+    getData();
+  }, []);
 
   return (
     <section>
@@ -61,24 +119,42 @@ const DataKeuangan = () => {
                 <tr className="border-b-gray-200 text-gray-400 text-sm font-medium">
                   <td>No</td>
                   <td>Tanggal Masuk / Keluar</td>
+                  <td>Peruntukan</td>
                   <td>Keterangan</td>
                   <td>Jumlah</td>
                   <td></td>
                 </tr>
               </thead>
               <tbody className="text-[#344767]">
-                <tr className="border-b-gray-200">
-                  <td>Cy Ganderton</td>
-                  <td>Blue</td>
-                  <td>Blue</td>
-                  <td>Blue</td>
-                </tr>
+                {data?.length > 0 ? (
+                  data?.map((item: KeuanganProps, index: number) => {
+                    return (
+                      <tr className="border-b-gray-200" key={index}>
+                        <td>{index + 1}</td>
+                        <td>{formatDate(item?.tanggal)}</td>
+                        <td>{item?.keterangan}</td>
+                        {item?.jenis_transaksi === "Pemasukan" ? (
+                          <td className="text-green-300">{item?.jenis_transaksi}</td>
+                        ) : (
+                          <td className="text-red-300">{item?.jenis_transaksi}</td>
+                        )}
+                        <td>{item?.jumlah}</td>
+                      </tr>
+                    );
+                  })
+                ) : (
+                  <tr className="border-b-gray-200">
+                    <td colSpan={5} className="text-center">
+                      Tidak ada Pemasukan
+                    </td>
+                  </tr>
+                )}
               </tbody>
             </table>
           </div>
         </div>
       </main>
-      <Footer admin/>
+      <Footer admin />
     </section>
   );
 };
