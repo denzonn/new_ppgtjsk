@@ -7,15 +7,119 @@ import { Link } from "react-router-dom";
 import Input from "../../../component/Input";
 import Footer from "../../../component/Footer";
 import { useMediaQuery } from "react-responsive";
-import axios from 'axios'
-import Cookie from 'js-cookie'
+import axios from "axios";
+import toast from "react-hot-toast";
+import { useFormik } from "formik";
+import { validateSaran } from "../../../validation/auth";
+
+const formatDate = (dateString: string) => {
+  const date = new Date(dateString);
+  const days = ["Minggu", "Senin", "Selasa", "Rabu", "Kamis", "Jumat", "Sabtu"];
+  const day = days[date.getDay()];
+  const dayOfMonth = date.getDate();
+  const months = [
+    "Januari",
+    "Februari",
+    "Maret",
+    "April",
+    "Mei",
+    "Juni",
+    "Juli",
+    "Agustus",
+    "September",
+    "Oktober",
+    "November",
+    "Desember",
+  ];
+  const month = months[date.getMonth()];
+  const year = date.getFullYear();
+
+  return `${day}, ${dayOfMonth} ${month} ${year}`;
+};
 
 const Home = () => {
   const [typedText, setTypedText] = useState("PENGURUS PPGT 2022 - 2024");
-  const [openCard, setOpenCard] = useState<boolean>(false);
+  const [openCard, setOpenCard] = useState<{ [key: number]: boolean }>({});
   const isLGScreen = useMediaQuery({ minWidth: 1024 });
   const [hovered, setHovered] = useState(false);
-  // const token = Cookie.get('token')
+
+  const [data, setData] = useState<any>();
+
+  const toggleOpenCard = (id: number) => {
+    setOpenCard((prevState) => {
+      const newState = { ...prevState };
+
+      // Mengubah nilai openCard sesuai dengan id yang di-klik
+      Object.keys(newState).forEach((key) => {
+        newState[key] = parseInt(key) === id; // Menetapkan true jika key sama dengan id yang di-klik
+      });
+
+      return newState;
+    });
+  };
+
+  const setMouseEnter = (id) => {
+    setHovered(true);
+    setOpenCard((prevState) => ({ ...prevState, [id]: true }));
+  };
+
+  const setMouseLeave = (id) => {
+    setHovered(false);
+    setOpenCard((prevState) => ({ ...prevState, [id]: false }));
+  };
+
+  const getData = () => {
+    axios
+      .get("home")
+      .then((res) => {
+        setData(res?.data?.data);
+      })
+      .catch((err) => {
+        toast.error(err.message);
+      });
+  };
+
+  const formik = useFormik({
+    initialValues: {
+      nama: "",
+      saran: "",
+    },
+    validationSchema: validateSaran,
+    onSubmit: (values) => {
+      axios
+        .post("saran", values)
+        .then(() => {
+          toast.success("Berhasil Mengirimkan Saran");
+
+          formik.resetForm();
+
+          setTimeout(() => {
+            window.location.reload();
+          }, 1500);
+        })
+        .catch((err) => {
+          if (err.response && err.response.data && err.response.data.message) {
+            toast.error(err.response.data.message);
+          } else if (
+            err.response &&
+            err.response.data &&
+            err.response.data.errors
+          ) {
+            const errorMessages = Object.values(
+              err.response.data.errors
+            ).flat();
+            toast.error(errorMessages.join("\n"));
+          } else {
+            // If the error doesn't have the expected structure, display a generic error message
+            toast.error("An error occurred. Please try again.");
+          }
+        });
+    },
+  });
+
+  useEffect(() => {
+    getData();
+  }, []);
 
   useEffect(() => {
     const typed = new Typed("#home", {
@@ -66,42 +170,28 @@ const Home = () => {
         <div className="text-2xl lg:text-3xl py-1 text-black relative font-semibold tracking-wide before:content-[''] before:absolute before:bottom-0 before:w-1/4 lg:before:w-1/12 lg:before:translate-x-0 lg:before:left-3 before:h-[2px] before:left-1/3 before:bg-line before:-translate-x-1/2">
           Renungan Pagi
         </div>
-        <div className="mt-3">
-          <iframe
-            src="https://www.youtube.com/emmed/watch?v=NS3D2IO_vHU"
-            className="w-full lg:w-1/3 h-[250px] lg:float-left mr-4"
-          ></iframe>
-        </div>
-        <div className="lg:ml-4">
-          <div className="text-[22px] mt-2 font-medium">
-            <span>Judul Renungan</span>
-            <span> (Ayat Renungan)</span>
-          </div>
-          <div className="text-justify font-light">
-            Lorem ipsum dolor sit amet consectetur, adipisicing elit. Impedit
-            totam nostrum fugit iusto! Laudantium, fugit. Optio quisquam
-            aspernatur, laudantium natus recusandae consequuntur magnam at
-            error. Pariatur magni nesciunt consectetur! Assumenda. Eveniet
-            nobis, quaerat vel mollitia laudantium animi architecto et, deleniti
-            amet provident magnam omnis molestias accusamus? Minus rerum
-            cupiditate quod, ad vitae quisquam maiores laboriosam voluptas
-            dignissimos, reprehenderit optio ipsum. Quibusdam voluptatem
-            assumenda ipsam libero voluptas consectetur velit alias deleniti
-            vitae natus earum tempore deserunt nesciunt nobis quam architecto,
-            adipisci explicabo, eum praesentium. Quos delectus perferendis quam
-            laborum similique eaque? Pariatur, incidunt sint optio, quo quam
-            facere perspiciatis magni eveniet aliquid eligendi architecto quia
-            nulla ex fugiat ullam? Laborum, odit iusto. Debitis impedit dolores
-            sunt quibusdam enim, cumque necessitatibus obcaecati? Illum
-            voluptatum rem architecto libero repudiandae. Deleniti rerum,
-            tempora quaerat soluta qui architecto nihil repudiandae, alias iste
-            tenetur necessitatibus aut similique sapiente reprehenderit libero
-            recusandae, earum distinctio. Nihil, perferendis quod!
-          </div>
-          <div className="text-[12px] text-[#a4a4a4] border-t border-b py-3 mt-4">
-            Penulis : Tim Renungan Harian GT
-          </div>
-        </div>
+        {data?.renungan?.map((item, index: number) => {
+          return (
+            <div key={index}>
+              <div className="mt-3">
+                <iframe
+                  src={item?.url_youtube}
+                  className="w-full lg:w-1/3 h-[250px] lg:float-left mr-4"
+                ></iframe>
+              </div>
+              <div className="lg:ml-4">
+                <div className="text-[22px] mt-2 font-medium">
+                  <span>{item?.judul}</span>
+                  <span> ({item?.ayat})</span>
+                </div>
+                <div className="text-justify font-light">{item?.isi}</div>
+                <div className="text-[12px] text-[#a4a4a4] border-t border-b py-3 mt-4">
+                  Penulis : Tim Renungan Harian GT
+                </div>
+              </div>
+            </div>
+          );
+        })}
       </div>
       <div className="px-6 py-10 lg:px-44 lg:py-2">
         <div className="text-2xl lg:text-3xl text-end py-1 text-black relative font-semibold tracking-wide before:content-[''] before:absolute before:bottom-0 before:w-1/4 lg:before:w-1/12 lg:before:translate-x-16 before:h-[2px] before:bg-line before:translate-x-1/2">
@@ -109,9 +199,16 @@ const Home = () => {
         </div>
         <div className="mt-3">
           <div className="block lg:grid lg:grid-cols-2 gap-x-5 lg:gap-x-8">
-            <Card />
-            <Card />
-            <Card />
+            {data?.kegiatan?.map((item, index: number) => {
+              return (
+                <Card
+                  picture={"http://127.0.0.1:8000/storage/" + item?.photo}
+                  activity={item?.name}
+                  description={item?.description}
+                  program={item?.program?.name}
+                />
+              );
+            })}
           </div>
         </div>
       </div>
@@ -130,24 +227,24 @@ const Home = () => {
               </tr>
             </thead>
             <tbody className="bg-white text-[16px]">
-              <tr className="border-b-0">
-                <td>Senin</td>
-                <td>Senin</td>
-                <td>Senin</td>
-                <td>Senin</td>
-              </tr>
-              <tr className="border-b-0">
-                <td>Senin</td>
-                <td>Senin</td>
-                <td>Senin</td>
-                <td>Senin</td>
-              </tr>
-              <tr className="border-b-0">
-                <td>Senin</td>
-                <td>Senin</td>
-                <td>Senin</td>
-                <td>Senin</td>
-              </tr>
+              {data?.kegiatanMingguan?.length > 0 ? (
+                data?.kegiatanMingguan?.map((item, index: number) => {
+                  return (
+                    <tr className="border-b-gray-200" key={index}>
+                      <td>{formatDate(item?.tanggal)}</td>
+                      <td>{item?.kegiatan?.name}</td>
+                      <td>{item?.waktu} WITA</td>
+                      <td>{item?.tempat}</td>
+                    </tr>
+                  );
+                })
+              ) : (
+                <tr className="border-b-gray-200">
+                  <td colSpan={4} className="text-center">
+                    Tidak ada Jadwal Kegiatan
+                  </td>
+                </tr>
+              )}
             </tbody>
           </table>
         </div>
@@ -175,40 +272,45 @@ const Home = () => {
           </div>
         </div>
         <div className="mt-4">
-          <div className="block lg:flex lg:flex-row">
-            <div
-              className={`transition-all duration-500 lg:w-1/4 lg:hover:w-3/4 lg:notho bg-black rounded-md relative mb-2 ${
-                openCard === true ? "h-[500px]" : "h-[100px] lg:h-[500px]"
-              } overflow-hidden`}
-              onClick={isLGScreen ? null : () => setOpenCard(!openCard)}
-              onMouseEnter={() => setHovered(true)}
-              onMouseLeave={() => setHovered(false)}
-            >
-              <img
-                src="../../../../public/pengurus.jpg"
-                alt=""
-                className="object-cover h-full w-full rounded-md"
-              />
-              {openCard === true ? (
+          <div className="block lg:flex lg:flex-row lg:gap-x-1">
+            {data?.ksb?.map((item, index: number) => {
+              return (
                 <div
-                  className={`lg:block absolute bottom-4 left-3 transform transition-transform duration-500 ${
-                    hovered
-                      ? "lg:block translate-x-0"
-                      : "lg:opacity-0 -translate-x-12"
-                  }`}
+                  key={item.id}
+                  className={`transition-all duration-500 lg:w-1/4 lg:hover:w-3/4 lg:notho bg-black rounded-md relative mb-2 ${
+                    openCard[item?.id] ? "h-[500px]" : "h-[100px] lg:h-[500px]"
+                  } overflow-hidden`}
+                  onClick={isLGScreen ? null : () => toggleOpenCard(item.id)}
+                  onMouseEnter={() => setMouseEnter(item?.id)}
+                  onMouseLeave={() => setMouseLeave(item?.id)}
                 >
-                  <div className="bg-name mb-1 px-2 text-white text-xl rounded-md">
-                    Denson Patibang
-                  </div>
-                  <div className="bg-name mb-1 px-2 text-white text-sm rounded-md w-fit">
-                    Ketua
-                  </div>
-                  <div className="bg-white px-2 text-primary text-sm rounded-md w-fit">
-                    Hidup Itu indah
-                  </div>
+                  <img
+                    src={"http://127.0.0.1:8000/storage/" + item.foto}
+                    alt=""
+                    className="object-cover h-full w-full rounded-md"
+                  />
+                  {openCard[item?.id] ? (
+                    <div
+                      className={`lg:block absolute bottom-4 left-3 transform transition-transform duration-1000 ${
+                        hovered
+                          ? "lg:block translate-x-0"
+                          : "lg:opacity-0 -translate-x-12"
+                      }`}
+                    >
+                      <div className="bg-name mb-1 px-2 text-white text-xl rounded-md">
+                        {item?.nama} {/* Ubah properti menjadi name */}
+                      </div>
+                      <div className="bg-name mb-1 px-2 text-white text-sm rounded-md w-fit">
+                        {item?.jabatan} {/* Ubah properti menjadi position */}
+                      </div>
+                      <div className="bg-white px-2 text-primary text-sm rounded-md w-fit">
+                        {item?.motto} {/* Tetap gunakan properti motto */}
+                      </div>
+                    </div>
+                  ) : null}
                 </div>
-              ) : null}
-            </div>
+              );
+            })}
           </div>
         </div>
       </div>
@@ -230,16 +332,54 @@ const Home = () => {
             <div className="mt-2 text-font text-xl font-semibold">
               Manajement
             </div>
-            <div className="text-[#696969]">Koordinator : Holy </div>
-            <div className="text-[#696969]">
-              Anggota :
-              <ol className="list-decimal pl-6 lg:pl-10">
-                <li>Denson</li>
-                <li>Denson</li>
-                <li>Denson</li>
-              </ol>
-            </div>
+            {data?.manajementPengurus?.map((item, index: number) => {
+              return (
+                <div className="text-[#696969]">
+                  {item?.jabatan?.nama_jabatan} : {item?.nama_anggota}
+                </div>
+              );
+            })}
           </div>
+          {data?.bidang?.map((item, index) => {
+            return (
+              <div className="w-full rounded-md px-2" key={index}>
+                <img
+                  src="../../../../public/pengurus.jpg"
+                  alt=""
+                  className="w-full h-[250px] object-cover rounded-md"
+                />
+                <div className="mt-2 text-font text-xl font-semibold">
+                  {item?.nama_bidang}
+                </div>
+                {data?.pengurus[index]?.map((anggota, anggotaIndex) =>
+                  anggota?.jabatan?.nama_jabatan === "Koordinator" ? (
+                    <div key={anggotaIndex} className="text-[rgb(105,105,105)]">
+                      Koordinator : {anggota?.nama_anggota}
+                    </div>
+                  ) : anggota?.jabatan?.nama_jabatan ===
+                    "Koordinator Kelompok" ? (
+                    <div key={anggotaIndex} className="text-[rgb(105,105,105)]">
+                      Koordinator : {anggota?.nama_anggota}
+                    </div>
+                  ) : null
+                )}
+                <div className="text-[rgb(105,105,105)]">
+                  Anggota :
+                  <div className="text-[#696969]">
+                    <ol className="list-decimal pl-6 lg:pl-10">
+                      {data?.pengurus[index]?.map((anggota) =>
+                        anggota?.jabatan?.nama_jabatan === "Anggota" ||
+                        anggota?.jabatan?.nama_jabatan ===
+                          "Wakil Koordinator" ? (
+                          <li>{anggota?.nama_anggota}</li>
+                        ) : null
+                      )}
+                    </ol>
+                  </div>
+                </div>
+              </div>
+            );
+          })}
         </div>
         <hr className="mt-10" />
       </div>
@@ -296,22 +436,32 @@ const Home = () => {
             lagi!
           </div>
           <div>
-            <form action="">
+            <form onSubmit={formik.handleSubmit}>
               <div className="mt-3">
-                <Input label="Nama" placeholder="Name" />
+                <Input
+                  label="Nama"
+                  name="nama"
+                  placeholder="Name"
+                  value={formik.values.nama}
+                  onChange={formik.handleChange}
+                  onBlur={formik.handleBlur}
+                />
               </div>
               <div className="mt-3">
                 <label htmlFor="" className="text-[#595959] text-lg">
                   Saran
                 </label>
                 <textarea
-                  name=""
+                  name="saran"
                   id=""
+                  value={formik.values.saran}
+                  onChange={formik.handleChange}
+                  onBlur={formik.handleBlur}
                   className="w-full h-32 bg-transparent border rounded-md focus:outline-none py-2 px-5"
                 ></textarea>
               </div>
               <div className="mt-3">
-                <Button label="Submit" className="w-full" />
+                <Button label="Submit" className="w-full" type="submit"/>
               </div>
             </form>
           </div>
@@ -321,33 +471,19 @@ const Home = () => {
             FAQ
           </div>
           <div className="mt-3 cardShadow rounded-md ">
-            <div className="collapse collapse-plus bg-white rounded-md w-full">
-              <input type="radio" name="my-accordion-3" />
-              <div className="collapse-title text-base font-medium text-[#3b566e]">
-                Click to open this one and close others
-              </div>
-              <div className="collapse-content">
-                <p className="text-[#6f8ba4]">hello</p>
-              </div>
-            </div>
-            <div className="collapse collapse-plus bg-white rounded-md">
-              <input type="radio" name="my-accordion-3" />
-              <div className="collapse-title text-base font-medium text-[#3b566e]">
-                Click to open this one and close others
-              </div>
-              <div className="collapse-content">
-                <p className="text-[#6f8ba4]">hello</p>
-              </div>
-            </div>
-            <div className="collapse collapse-plus bg-white rounded-md">
-              <input type="radio" name="my-accordion-3" />
-              <div className="collapse-title text-base font-medium text-[#3b566e]">
-                Click to open this one and close others
-              </div>
-              <div className="collapse-content">
-                <p className="text-[#6f8ba4]">hello</p>
-              </div>
-            </div>
+            {data?.faq?.map((item, index: number) => {
+              return (
+                <div className="collapse collapse-plus bg-white rounded-md w-full">
+                  <input type="radio" name="my-accordion-3" />
+                  <div className="collapse-title text-base font-medium text-[#3b566e]">
+                    {item?.pertanyaan}
+                  </div>
+                  <div className="collapse-content">
+                    <p className="text-[#6f8ba4]">{item?.jawaban}</p>
+                  </div>
+                </div>
+              );
+            })}
           </div>
         </div>
       </div>

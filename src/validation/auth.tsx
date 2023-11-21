@@ -161,3 +161,8 @@ export const validateIuran = yup.object({
   jumlah: yup.number().required("Anda Harus Memasukkan Jumlah"),
   kelompok: yup.string().required("Anda Harus Memilih Kelompok"),
 });
+
+export const validateSaran = yup.object({
+  nama: yup.string().required("Anda Harus Memasukkan Nama"),
+  saran: yup.string().required("Anda Harus Memasukkan Saran"),
+});
