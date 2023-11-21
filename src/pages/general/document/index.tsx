@@ -1,8 +1,28 @@
-import React from "react";
+import React, { useEffect, useState } from "react";
 import Navbar from "../../../component/Navbar";
 import Footer from "../../../component/Footer";
+import axios from "axios";
+import toast from "react-hot-toast";
+import { Link } from "react-router-dom";
 
 const Document = () => {
+  const [data, setData] = useState<any>();
+
+  const getData = () => {
+    axios
+      .get("dokument")
+      .then((res) => {
+        setData(res?.data?.data);
+      })
+      .catch((err) => {
+        toast.error(err.message);
+      });
+  };
+
+  useEffect(() => {
+    getData();
+  }, []);
+
   return (
     <div className="mt-[10vh]">
       <Navbar />
@@ -41,42 +61,51 @@ const Document = () => {
             </div>
           </div>
         </div>
-        <div className="relative flex flex-col mt-6 text-gray-700 bg-white shadow-md w-96 rounded-xl bg-clip-border">
-          <div className="p-6">
-            <i className="fa-solid fa-folder-open text-primaryButton text-3xl mb-2 "></i>
-            <h5 className="block mb-2 font-sans text-xl antialiased font-semibold leading-snug tracking-normal text-blue-gray-900">
-              UI/UX Review Check
-            </h5>
-          </div>
-          <div className="p-6 pt-0">
-            <a
-              className="!font-medium !text-blue-gray-900 !transition-colors hover:!text-primaryButton"
-              href="#"
-            >
-              <button
-                className="flex items-center gap-2 px-4 py-2 font-sans text-xs font-bold text-center text-primaryButton uppercase align-middle transition-all rounded-lg select-none hover:bg-[#93a5eb2e] active:bg-[#3b50b1] disabled:pointer-events-none disabled:opacity-50 disabled:shadow-none"
-                type="button"
-                data-ripple-dark="true"
-              >
-                Download File
-                <svg
-                  xmlns="http://www.w3.org/2000/svg"
-                  fill="none"
-                  viewBox="0 0 24 24"
-                  stroke-width="2"
-                  stroke="currentColor"
-                  aria-hidden="true"
-                  className="w-4 h-4"
-                >
-                  <path
-                    stroke-linecap="round"
-                    stroke-linejoin="round"
-                    d="M17.25 8.25L21 12m0 0l-3.75 3.75M21 12H3"
-                  ></path>
-                </svg>
-              </button>
-            </a>
-          </div>
+        <div className="grid grid-cols-3 gap-5">
+          {data?.map((item, index: number) => {
+            return (
+              <div className="relative flex flex-col mt-6 text-gray-700 bg-white shadow-md w-96 rounded-xl bg-clip-border">
+                <div>
+                  <div className="p-6">
+                    <i className="fa-solid fa-folder-open text-primaryButton text-3xl mb-2 "></i>
+                    <h5 className="block mb-2 font-sans text-xl antialiased font-semibold leading-snug tracking-normal text-blue-gray-900">
+                      {item?.judul}
+                    </h5>
+                  </div>
+                  <div className="p-6 pt-0">
+                    <Link
+                      className="!font-medium !text-blue-gray-900 !transition-colors hover:!text-primaryButton"
+                      to={`http://127.0.0.1:8000/storage/${item?.file}`}
+                      target="_blank"
+                    >
+                      <button
+                        className="flex items-center gap-2 px-4 py-2 font-sans text-xs font-bold text-center text-primaryButton uppercase align-middle transition-all rounded-lg select-none hover:bg-[#93a5eb2e] active:bg-[#3b50b1] disabled:pointer-events-none disabled:opacity-50 disabled:shadow-none"
+                        type="button"
+                        data-ripple-dark="true"
+                      >
+                        Download File
+                        <svg
+                          xmlns="http://www.w3.org/2000/svg"
+                          fill="none"
+                          viewBox="0 0 24 24"
+                          stroke-width="2"
+                          stroke="currentColor"
+                          aria-hidden="true"
+                          className="w-4 h-4"
+                        >
+                          <path
+                            stroke-linecap="round"
+                            stroke-linejoin="round"
+                            d="M17.25 8.25L21 12m0 0l-3.75 3.75M21 12H3"
+                          ></path>
+                        </svg>
+                      </button>
+                    </Link>
+                  </div>
+                </div>
+              </div>
+            );
+          })}
         </div>
       </div>
       <Footer />

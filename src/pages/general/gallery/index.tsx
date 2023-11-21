@@ -1,8 +1,10 @@
-import React, { useEffect, useRef, useState } from "react";
+import React, { useEffect, useState } from "react";
 import Navbar from "../../../component/Navbar";
 import Footer from "../../../component/Footer";
 import Popup from "../../../component/Popup";
 import { motion } from "framer-motion";
+import axios from "axios";
+import toast from "react-hot-toast";
 
 const content = {
   hidden: {
@@ -32,28 +34,35 @@ const textContent = {
       delay: 0.7,
     },
   },
-}
+};
 
 const Gallery = () => {
-  const [selected, setSelected] = useState<string>();
-  const [showImage, setShowImage] = useState<boolean>(false);
+  const [data, setData] = useState<any>();
+  const [id, setId] = useState<number>(1);
+  const [name, setName] = useState<string>('');
+  const [image, setImage] = useState<string>('');
+  
   const [showBidang, setShowBidang] = useState<boolean>(false);
-
-  const modalRef = useRef<HTMLDivElement | null>(null);
-
-  const handleClickOutside = (event: MouseEvent) => {
-    if (modalRef.current && !modalRef.current.contains(event.target as Node)) {
-      setShowBidang(false);
-    }
-  };
+  const [showImage, setShowImage] = useState<boolean>(false);
 
   useEffect(() => {
-    window.addEventListener('mousedown', handleClickOutside);
-
-    return () => {
-      window.removeEventListener('mousedown', handleClickOutside);
+    const fetchData = async () => {
+      try {
+        const response = await axios.get("get-gallery");
+        const data = response?.data?.data;
+        setData(response?.data?.data);
+  
+        const firstName = data?.kegiatan[0]?.name;
+        if (firstName) {
+          setName(firstName);
+        }
+      } catch (error) {
+        toast.error(error.message);
+      }
     };
-  }, [showBidang]);
+  
+    fetchData();
+  }, []);
 
   return (
     <div className="mt-[10vh]">
@@ -72,59 +81,69 @@ const Gallery = () => {
             className="bg-[#5380f7] text-white px-8 py-3 text-sm rounded-lg "
             onClick={() => setShowBidang(!showBidang)}
           >
-            PILIH BIDANG <i className="ml-2 fa-solid fa-map"></i>
+            PILIH KEGIATAN <i className="ml-2 fa-solid fa-map"></i>
           </button>
           {showBidang ? (
-            <motion.div variants={content} exit='hidden' animate='visible' initial='hidden' className="absolute top-full bg-white px-3 py-1 shadow-sm rounded-lg z-10" ref={modalRef}>
-              <ul className="leading-10">
-                <motion.li variants={textContent} className="hover:cursor-pointer hover:bg-[#537ff725] rounded-lg px-2">Organisasi</motion.li>
-                <motion.li variants={textContent} className="hover:cursor-pointer hover:bg-[#537ff725] rounded-lg px-2">Spiritualitas</motion.li>
-                <motion.li variants={textContent} className="hover:cursor-pointer hover:bg-[#537ff725] rounded-lg px-2" onClick={() => setSelected('Manajement')}>Manajement</motion.li>
-                <motion.li variants={textContent} className="hover:cursor-pointer hover:bg-[#537ff725] rounded-lg px-2">Pelayanan Sosial</motion.li>
-                <motion.li variants={textContent} className="hover:cursor-pointer hover:bg-[#537ff725] rounded-lg px-2">Sumber Daya Manusia</motion.li>
+            <motion.div
+              variants={content}
+              exit="hidden"
+              animate="visible"
+              initial="hidden"
+              className="absolute top-full bg-white px-3 py-1 shadow-sm rounded-lg z-10"
+            >
+              <ul className="pl-0 py-2 pb-0">
+                {data?.kegiatan?.map((item, index: number) => {
+                  return (
+                    <motion.li
+                      variants={textContent}
+                      className="hover:cursor-pointer hover:bg-[#537ff725] rounded-lg px-2 py-2"
+                      key={index}
+                      onClick={() => {
+                        setId(item?.id), setName(item?.name);
+                      }}
+                    >
+                      {item?.name}
+                    </motion.li>
+                  );
+                })}
               </ul>
             </motion.div>
           ) : null}
         </div>
 
-        {selected === "Manajement" && (
-          <div className="mt-6" id="Manajement">
-            <div className="text-center text-2xl font-semibold">
-              Ibadah Rutin
-            </div>
-            <div className="grid grid-cols-4 gap-5">
-              <div
-                className="w-full h-60 rounded-md galleryShadow overflow-hidden"
-                onClick={() => setShowImage(!showImage)}
-              >
-                <img
-                  src="../../../../public/pengurus.jpg"
-                  alt=""
-                  className="w-full h-full object-cover rounded-md transition-all ease-in-out duration-300 hover:scale-110"
-                />
-              </div>
-            </div>
-            {showImage === true ? (
-              <Popup onConfirm={() => setShowImage(false)}>
-                <div className="relative h-[90vh] bg-white rounded-lg shadow">
-                  <div className="absolute top-1/2 -translate-x-1/2 bg-white px-5 py-4 rounded-full bg-clip-padding backdrop-filter backdrop-blur-sm bg-opacity-10">
-                    <i className="fa-solid fa-backward text-white"></i>
-                  </div>
-                  <div className="space-y-2 flex flex-col justify-center items-center ">
-                    <img
-                      src="../../../../public/pengurus.jpg"
-                      alt=""
-                      className="h-[90vh] w-full rounded-md"
-                    />
-                  </div>
-                  <div className="absolute top-1/2 right-0 translate-x-1/2 bg-white px-5 py-4 rounded-full bg-clip-padding backdrop-filter backdrop-blur-sm bg-opacity-10">
-                    <i className="fa-solid fa-forward text-white"></i>
-                  </div>
+        <div className="mt-6" id="Manajement">
+          <div className="text-center text-2xl font-semibold">{name}</div>
+          <div className="grid grid-cols-4 gap-5">
+            {data?.gallery[id].map((item, index: number) => {
+              return (
+                <div
+                  className="w-full h-60 rounded-md galleryShadow overflow-hidden"
+                  onClick={() => {setShowImage(!showImage), setImage(item?.photo)}}
+                  key={index}
+                >
+                  <img
+                    src={`http://127.0.0.1:8000/storage/${item?.photo}`}
+                    alt=""
+                    className="w-full h-full object-cover rounded-md transition-all ease-in-out duration-300 hover:scale-110"
+                  />
                 </div>
-              </Popup>
-            ) : null}
+              );
+            })}
           </div>
-        )}
+          {showImage === true ? (
+            <Popup onConfirm={() => setShowImage(false)}>
+              <div className="relative h-[90vh] bg-white rounded-lg shadow">
+                <div className="space-y-2 flex flex-col justify-center items-center ">
+                  <img
+                    src={`http://127.0.0.1:8000/storage/${image}`}
+                    alt=""
+                    className="h-[90vh] w-full rounded-md"
+                  />
+                </div>
+              </div>
+            </Popup>
+          ) : null}
+        </div>
       </div>
       <Footer />
     </div>

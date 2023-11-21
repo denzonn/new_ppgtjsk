@@ -35,6 +35,7 @@ import axios from "axios";
 import storage from "axios"
 import Login from "./pages/general/login";
 import { Toaster } from "react-hot-toast";
+import DetailActivity from "./pages/general/detailActivity";
 
 const App = () => {
   storage.defaults.baseURL = "http://127.0.0.1:8000/storage/";
@@ -49,6 +50,7 @@ const App = () => {
         <Route element={<Iuran />} path="/iuran" />
         <Route element={<UnitUsaha />} path="/unit-usaha" />
         <Route element={<Activity />} path="/kegiatan" />
+        <Route element={<DetailActivity />} path="/detail/:slug" />
         <Route element={<Profil />} path="/profil-ppgt" />
         <Route element={<Document />} path="/dokument" />
         <Route element={<Gallery />} path="/gallery" />

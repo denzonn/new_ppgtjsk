@@ -1,8 +1,27 @@
-import React from "react";
+import { useState, useEffect } from "react";
 import Navbar from "../../../component/Navbar";
 import Footer from "../../../component/Footer";
+import axios from "axios";
+import toast from "react-hot-toast";
 
 const Iuran = () => {
+  const [data, setData] = useState<any>();
+
+  const getData = () => {
+    axios
+      .get("iuran")
+      .then((res) => {
+        setData(res?.data?.data);
+      })
+      .catch((err) => {
+        toast.error(err.message);
+      });
+  };
+
+  useEffect(() => {
+    getData();
+  }, []);
+
   return (
     <div className="mt-[10vh]">
       <Navbar />
@@ -21,24 +40,24 @@ const Iuran = () => {
               </tr>
             </thead>
             <tbody className="bg-white text-[16px]">
-              <tr className="border-b-0">
-                <td>Senin</td>
-                <td>Senin</td>
-                <td>Senin</td>
-                <td>Senin</td>
-              </tr>
-              <tr className="border-b-0">
-                <td>Senin</td>
-                <td>Senin</td>
-                <td>Senin</td>
-                <td>Senin</td>
-              </tr>
-              <tr className="border-b-0">
-                <td>Senin</td>
-                <td>Senin</td>
-                <td>Senin</td>
-                <td>Senin</td>
-              </tr>
+              {data?.length > 0 ? (
+                data?.map((item, index: number) => {
+                  return (
+                    <tr className="border-b-0" key={index}>
+                      <td>{index+1}</td>
+                      <td>{item?.nama}</td>
+                      <td>{item?.kelompok}</td>
+                      <td>{item?.keterangan}</td>
+                    </tr>
+                  );
+                })
+              ) : (
+                <tr className="border-b-gray-200">
+                  <td colSpan={4} className="text-center">
+                    Tidak ada Iuran
+                  </td>
+                </tr>
+              )}
             </tbody>
           </table>
         </div>

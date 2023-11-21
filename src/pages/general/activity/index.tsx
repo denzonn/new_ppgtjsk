@@ -1,8 +1,11 @@
-import React, { useEffect, useRef, useState } from "react";
+import { useEffect, useState } from "react";
 import Navbar from "../../../component/Navbar";
 import Footer from "../../../component/Footer";
 import { motion } from "framer-motion";
 import Card from "../../../component/Card";
+import axios from "axios";
+import toast from "react-hot-toast";
+import Cookie from 'js-cookie'
 
 const content = {
   hidden: {
@@ -35,23 +38,24 @@ const textContent = {
 };
 
 const Activity = () => {
+  const [data, setData] = useState<any>();
+  const [id, setId] = useState<number>(1);
   const [showBidang, setShowBidang] = useState<boolean>(false);
 
-  const modalRef = useRef<HTMLDivElement | null>(null);
-
-  const handleClickOutside = (event: MouseEvent) => {
-    if (modalRef.current && !modalRef.current.contains(event.target as Node)) {
-      setShowBidang(false);
-    }
+  const getData = () => {
+    axios
+      .get("allKegiatan")
+      .then((res) => {
+        setData(res?.data?.data);
+      })
+      .catch((err) => {
+        toast.error(err.message);
+      });
   };
 
   useEffect(() => {
-    window.addEventListener("mousedown", handleClickOutside);
-
-    return () => {
-      window.removeEventListener("mousedown", handleClickOutside);
-    };
-  }, [showBidang]);
+    getData();
+  }, []);
 
   return (
     <div className="mt-[10vh]">
@@ -74,53 +78,42 @@ const Activity = () => {
               animate="visible"
               initial="hidden"
               className="absolute top-full bg-white px-3 py-1 shadow-sm rounded-lg z-10"
-              ref={modalRef}
             >
-              <ul className="leading-10">
-                <motion.li
-                  variants={textContent}
-                  className="hover:cursor-pointer hover:bg-[#537ff725] rounded-lg px-2"
-                >
-                  Organisasi
-                </motion.li>
-                <motion.li
-                  variants={textContent}
-                  className="hover:cursor-pointer hover:bg-[#537ff725] rounded-lg px-2"
-                >
-                  Spiritualitas
-                </motion.li>
-                <motion.li
-                  variants={textContent}
-                  className="hover:cursor-pointer hover:bg-[#537ff725] rounded-lg px-2"
-                  onClick={() => setSelected("Manajement")}
-                >
-                  Manajement
-                </motion.li>
-                <motion.li
-                  variants={textContent}
-                  className="hover:cursor-pointer hover:bg-[#537ff725] rounded-lg px-2"
-                >
-                  Pelayanan Sosial
-                </motion.li>
-                <motion.li
-                  variants={textContent}
-                  className="hover:cursor-pointer hover:bg-[#537ff725] rounded-lg px-2"
-                >
-                  Sumber Daya Manusia
-                </motion.li>
+              <ul className="pl-0 py-2 pb-0">
+                {data?.bidang?.map((item, index: number) => {
+                  return (
+                    <motion.li
+                      variants={textContent}
+                      className="hover:cursor-pointer hover:bg-[#537ff725] rounded-lg px-2 py-2"
+                      key={index}
+                      onClick={() => setId(item?.id)}
+                    >
+                      {item?.nama_bidang}
+                    </motion.li>
+                  );
+                })}
               </ul>
             </motion.div>
           ) : null}
         </div>
         <div className="mt-3">
           <div className="block lg:grid lg:grid-cols-2 gap-x-5 lg:gap-x-8">
-            <Card />
-            <Card />
-            <Card />
+            {data?.kegiatan[id].map((item, index: number) => {
+              return (
+                <Card
+                  picture={`http://127.0.0.1:8000/storage/${item?.photo}`}
+                  program={item?.program?.name}
+                  description={item?.description}
+                  activity={item?.name}
+                  key={index}
+                  link={`detail/${item?.slug}`}
+                  onClick={() => Cookie.set('slug', item?.slug)}
+                />
+              );
+            })}
           </div>
         </div>
       </div>
-
       <Footer />
     </div>
   );

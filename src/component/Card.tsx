@@ -6,6 +6,7 @@ interface CardProps {
   program?: string;
   activity?: string;
   description?: string;
+  link?: string;
 
   color?: string;
   onClick?: React.MouseEventHandler;
@@ -36,6 +37,7 @@ const Card: FC<CardType> = ({
   color,
   types,
   total,
+  link,
   unit,
   pengurus,
   label,
@@ -95,10 +97,16 @@ const Card: FC<CardType> = ({
       <div className="lg:-translate-x-2">
         <div className="text-[#8e8c8c] font-semibold">{program}</div>
         <div className="text-2xl text-[#4facfe] font-semibold">{activity}</div>
-        <div className="font-light opacity-70">
-          {description}
+        <div className="font-light opacity-70">{description}</div>
+        <div className="mt-3">
+          <a
+            href={link}
+            className="bg-button  px-3 text-white py-2 rounded-md"
+            onClick={onClick}
+          >
+            Read More
+          </a>
         </div>
-        <Button label="Read More" className="bg-button mt-3 px-3 text-sm" />
       </div>
     </div>
   );
